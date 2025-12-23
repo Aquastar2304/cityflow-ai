@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Clock, 
@@ -16,42 +16,109 @@ import { RecommendationCard } from "@/components/dashboard/RecommendationCard";
 import { JunctionMap } from "@/components/dashboard/JunctionMap";
 import { CongestionChart } from "@/components/dashboard/CongestionChart";
 import { 
-  junctions, 
-  alerts, 
-  recommendations as initialRecommendations, 
-  currentMetrics,
-  hourlyData,
   Junction,
   AIRecommendation
 } from "@/lib/trafficData";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 
 const TrafficDashboard = () => {
-  const [recommendations, setRecommendations] = useState<AIRecommendation[]>(initialRecommendations);
-  const [selectedJunction, setSelectedJunction] = useState<Junction | null>(null);
+  const queryClient = useQueryClient();
+  const [selectedJunctionId, setSelectedJunctionId] = useState<string | null>(null);
+
+  const { data: junctions = [], isLoading: loadingJunctions } = useQuery({
+    queryKey: ["junctions"],
+    queryFn: api.getJunctions,
+    refetchInterval: 5000,
+  });
+
+  const { data: alerts = [], isLoading: loadingAlerts } = useQuery({
+    queryKey: ["alerts"],
+    queryFn: api.getAlerts,
+    refetchInterval: 5000,
+  });
+
+  const { data: recommendations = [], isLoading: loadingRecommendations } = useQuery({
+    queryKey: ["recommendations"],
+    queryFn: api.getRecommendations,
+    refetchInterval: 5000,
+  });
+
+  const { data: currentMetrics } = useQuery({
+    queryKey: ["metrics"],
+    queryFn: api.getMetrics,
+    refetchInterval: 5000,
+  });
+
+  const { data: hourlyData = [] } = useQuery({
+    queryKey: ["hourlyData"],
+    queryFn: api.getHourlyData,
+    refetchInterval: 10000,
+  });
+
+  const selectedJunction = useMemo(
+    () => junctions.find((j) => j.id === selectedJunctionId) ?? null,
+    [junctions, selectedJunctionId]
+  );
+
+  const recommendationMutation = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: AIRecommendation["status"] }) =>
+      api.updateRecommendationStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recommendations"] });
+      queryClient.invalidateQueries({ queryKey: ["metrics"] });
+    },
+    onError: () => {
+      toast({
+        title: "Action failed",
+        description: "Could not update recommendation. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleAcceptRecommendation = (id: string) => {
-    setRecommendations(prev => 
-      prev.map(r => r.id === id ? { ...r, status: "accepted" as const } : r)
+    recommendationMutation.mutate(
+      { id, status: "accepted" },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Recommendation Accepted",
+            description: "Signal timing optimization has been applied.",
+          });
+        },
+      }
     );
-    toast({
-      title: "Recommendation Accepted",
-      description: "Signal timing optimization has been applied.",
-    });
   };
 
   const handleRejectRecommendation = (id: string) => {
-    setRecommendations(prev => 
-      prev.map(r => r.id === id ? { ...r, status: "rejected" as const } : r)
+    recommendationMutation.mutate(
+      { id, status: "rejected" },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Recommendation Rejected",
+            description: "The AI will learn from this decision.",
+          });
+        },
+      }
     );
-    toast({
-      title: "Recommendation Rejected",
-      description: "The AI will learn from this decision.",
-    });
   };
 
   const pendingRecommendations = recommendations.filter(r => r.status === "pending");
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ["junctions"] });
+    queryClient.invalidateQueries({ queryKey: ["alerts"] });
+    queryClient.invalidateQueries({ queryKey: ["recommendations"] });
+    queryClient.invalidateQueries({ queryKey: ["metrics"] });
+    queryClient.invalidateQueries({ queryKey: ["hourlyData"] });
+  };
+
+  const isLoading =
+    loadingJunctions || loadingAlerts || loadingRecommendations || !currentMetrics;
 
   return (
     <div className="min-h-screen bg-background">
@@ -79,7 +146,7 @@ const TrafficDashboard = () => {
                 <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
                 <span className="text-xs text-success font-medium">System Active</span>
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
                 <RefreshCw className="w-4 h-4" />
                 Refresh
               </Button>
@@ -93,49 +160,55 @@ const TrafficDashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <MetricCard
-              title="Avg Travel Time"
-              value={currentMetrics.avgTravelTime}
-              unit="min"
-              icon={Clock}
-              trend={{ value: 12, positive: true }}
-              variant="primary"
-            />
-            <MetricCard
-              title="Fuel Consumption"
-              value={currentMetrics.fuelConsumption}
-              unit="L/100km"
-              icon={Fuel}
-              trend={{ value: 8, positive: true }}
-              variant="warning"
-            />
-            <MetricCard
-              title="CO₂ Emissions"
-              value={currentMetrics.co2Emissions}
-              unit="t/hr"
-              icon={Leaf}
-              trend={{ value: 15, positive: true }}
-              variant="success"
-            />
-            <MetricCard
-              title="Emergency Response"
-              value={currentMetrics.emergencyResponseTime}
-              unit="min"
-              icon={Siren}
-              variant="destructive"
-            />
-            <MetricCard
-              title="Active Vehicles"
-              value={currentMetrics.activeVehicles.toLocaleString()}
-              icon={Car}
-            />
-            <MetricCard
-              title="Optimized Junctions"
-              value={currentMetrics.optimizedJunctions}
-              unit="/52"
-              icon={CheckCircle}
-              variant="success"
-            />
+            {currentMetrics ? (
+              <>
+                <MetricCard
+                  title="Avg Travel Time"
+                  value={currentMetrics.avgTravelTime}
+                  unit="min"
+                  icon={Clock}
+                  trend={{ value: 12, positive: true }}
+                  variant="primary"
+                />
+                <MetricCard
+                  title="Fuel Consumption"
+                  value={currentMetrics.fuelConsumption}
+                  unit="L/100km"
+                  icon={Fuel}
+                  trend={{ value: 8, positive: true }}
+                  variant="warning"
+                />
+                <MetricCard
+                  title="CO₂ Emissions"
+                  value={currentMetrics.co2Emissions}
+                  unit="t/hr"
+                  icon={Leaf}
+                  trend={{ value: 15, positive: true }}
+                  variant="success"
+                />
+                <MetricCard
+                  title="Emergency Response"
+                  value={currentMetrics.emergencyResponseTime}
+                  unit="min"
+                  icon={Siren}
+                  variant="destructive"
+                />
+                <MetricCard
+                  title="Active Vehicles"
+                  value={currentMetrics.activeVehicles.toLocaleString()}
+                  icon={Car}
+                />
+                <MetricCard
+                  title="Optimized Junctions"
+                  value={currentMetrics.optimizedJunctions}
+                  unit={`/${junctions.length || 52}`}
+                  icon={CheckCircle}
+                  variant="success"
+                />
+              </>
+            ) : (
+              <div className="col-span-6 text-sm text-muted-foreground">Loading metrics...</div>
+            )}
           </motion.div>
 
           {/* Main Content Grid */}
@@ -149,7 +222,7 @@ const TrafficDashboard = () => {
             >
               <JunctionMap 
                 junctions={junctions} 
-                onSelectJunction={setSelectedJunction}
+                onSelectJunction={(junction: Junction) => setSelectedJunctionId(junction.id)}
               />
               <CongestionChart data={hourlyData} />
             </motion.div>

@@ -23,7 +23,8 @@ import {
   PieChart,
   Pie
 } from "recharts";
-import { junctions, hourlyData } from "@/lib/trafficData";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 // Bottleneck data
@@ -62,6 +63,18 @@ const impactMetrics = [
 ];
 
 const PlannerDashboard = () => {
+  const { data: junctions = [] } = useQuery({
+    queryKey: ["junctions"],
+    queryFn: api.getJunctions,
+    refetchInterval: 5000,
+  });
+
+  const { data: hourlyData = [] } = useQuery({
+    queryKey: ["hourlyData"],
+    queryFn: api.getHourlyData,
+    refetchInterval: 10000,
+  });
+
   const severeJunctions = junctions.filter(j => j.congestionLevel === "severe");
   
   return (
