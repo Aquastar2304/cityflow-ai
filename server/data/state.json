@@ -6,9 +6,9 @@
       "lat": 12.9748,
       "lng": 77.6067,
       "congestionLevel": "heavy",
-      "vehicleCount": 118,
-      "queueLength": 320,
-      "avgWaitTime": 147,
+      "vehicleCount": 101,
+      "queueLength": 312,
+      "avgWaitTime": 163,
       "corridorId": "c1"
     },
     {
@@ -16,10 +16,10 @@
       "name": "Silk Board Junction",
       "lat": 12.9177,
       "lng": 77.6238,
-      "congestionLevel": "moderate",
-      "vehicleCount": 307,
-      "queueLength": 193,
-      "avgWaitTime": 30,
+      "congestionLevel": "heavy",
+      "vehicleCount": 312,
+      "queueLength": 228,
+      "avgWaitTime": 20,
       "corridorId": "c2"
     },
     {
@@ -27,10 +27,10 @@
       "name": "Hebbal Flyover",
       "lat": 13.0358,
       "lng": 77.597,
-      "congestionLevel": "heavy",
-      "vehicleCount": 244,
-      "queueLength": 202,
-      "avgWaitTime": 255,
+      "congestionLevel": "moderate",
+      "vehicleCount": 274,
+      "queueLength": 145,
+      "avgWaitTime": 248,
       "corridorId": "c3"
     },
     {
@@ -39,9 +39,9 @@
       "lat": 13.0082,
       "lng": 77.6969,
       "congestionLevel": "low",
-      "vehicleCount": 643,
-      "queueLength": 19,
-      "avgWaitTime": 180,
+      "vehicleCount": 646,
+      "queueLength": 10,
+      "avgWaitTime": 139,
       "corridorId": "c2"
     },
     {
@@ -50,9 +50,9 @@
       "lat": 12.9591,
       "lng": 77.7011,
       "congestionLevel": "moderate",
-      "vehicleCount": 754,
-      "queueLength": 99,
-      "avgWaitTime": 141,
+      "vehicleCount": 664,
+      "queueLength": 134,
+      "avgWaitTime": 193,
       "corridorId": "c2"
     },
     {
@@ -60,10 +60,10 @@
       "name": "Indiranagar 100ft Road",
       "lat": 12.9784,
       "lng": 77.6408,
-      "congestionLevel": "severe",
-      "vehicleCount": 329,
-      "queueLength": 447,
-      "avgWaitTime": 191,
+      "congestionLevel": "heavy",
+      "vehicleCount": 279,
+      "queueLength": 373,
+      "avgWaitTime": 171,
       "corridorId": "c1"
     },
     {
@@ -72,9 +72,9 @@
       "lat": 12.9352,
       "lng": 77.6245,
       "congestionLevel": "severe",
-      "vehicleCount": 492,
-      "queueLength": 400,
-      "avgWaitTime": 268,
+      "vehicleCount": 431,
+      "queueLength": 381,
+      "avgWaitTime": 257,
       "corridorId": "c4"
     },
     {
@@ -83,9 +83,9 @@
       "lat": 12.8458,
       "lng": 77.6603,
       "congestionLevel": "severe",
-      "vehicleCount": 417,
-      "queueLength": 388,
-      "avgWaitTime": 127,
+      "vehicleCount": 359,
+      "queueLength": 428,
+      "avgWaitTime": 179,
       "corridorId": "c5"
     },
     {
@@ -94,9 +94,9 @@
       "lat": 12.9698,
       "lng": 77.75,
       "congestionLevel": "moderate",
-      "vehicleCount": 635,
-      "queueLength": 141,
-      "avgWaitTime": 130,
+      "vehicleCount": 616,
+      "queueLength": 172,
+      "avgWaitTime": 163,
       "corridorId": "c6"
     },
     {
@@ -104,10 +104,10 @@
       "name": "Yeshwanthpur Circle",
       "lat": 13.0287,
       "lng": 77.5416,
-      "congestionLevel": "moderate",
-      "vehicleCount": 356,
-      "queueLength": 95,
-      "avgWaitTime": 46,
+      "congestionLevel": "low",
+      "vehicleCount": 458,
+      "queueLength": 90,
+      "avgWaitTime": 37,
       "corridorId": "c3"
     },
     {
@@ -116,9 +116,9 @@
       "lat": 12.9308,
       "lng": 77.5838,
       "congestionLevel": "heavy",
-      "vehicleCount": 237,
-      "queueLength": 252,
-      "avgWaitTime": 208,
+      "vehicleCount": 103,
+      "queueLength": 228,
+      "avgWaitTime": 222,
       "corridorId": "c4"
     },
     {
@@ -126,14 +126,41 @@
       "name": "Majestic Bus Stand",
       "lat": 12.9766,
       "lng": 77.5713,
-      "congestionLevel": "low",
-      "vehicleCount": 486,
-      "queueLength": 63,
-      "avgWaitTime": 82,
+      "congestionLevel": "moderate",
+      "vehicleCount": 524,
+      "queueLength": 133,
+      "avgWaitTime": 90,
       "corridorId": "c7"
     }
   ],
   "alerts": [
+    {
+      "id": "bc39bbeb-6e1e-4869-8c1e-8ad75ebf4197",
+      "type": "prediction",
+      "title": "Upcoming congestion detected",
+      "description": "Model expects KR Puram Junction to cross heavy threshold in 20 mins",
+      "severity": "warning",
+      "junctionId": "j4",
+      "timestamp": "2025-12-23T11:36:02.905Z"
+    },
+    {
+      "id": "2e82d474-8493-491a-8f89-7308e99e98fc",
+      "type": "incident",
+      "title": "Minor incident reported",
+      "description": "Temporary capacity drop at Koramangala Sony Signal. Field team notified.",
+      "severity": "warning",
+      "junctionId": "j7",
+      "timestamp": "2025-12-23T11:35:57.905Z"
+    },
+    {
+      "id": "88f270fe-41c9-498e-b375-688cf189da4f",
+      "type": "congestion",
+      "title": "Severe congestion alert",
+      "description": "Hebbal Flyover approaching gridlock, coordinating corridor clearance.",
+      "severity": "critical",
+      "junctionId": "j3",
+      "timestamp": "2025-12-23T11:35:47.905Z"
+    },
     {
       "id": "b181fafc-e144-4509-9d7f-8671924f1b07",
       "type": "prediction",
@@ -196,36 +223,35 @@
       "severity": "critical",
       "junctionId": "j7",
       "timestamp": "2025-12-23T11:34:27.895Z"
-    },
-    {
-      "id": "2ceedcfd-27ad-43bb-a0bf-eb8fca597179",
-      "type": "prediction",
-      "title": "Upcoming congestion detected",
-      "description": "Model expects Silk Board Junction to cross heavy threshold in 20 mins",
-      "severity": "warning",
-      "junctionId": "j2",
-      "timestamp": "2025-12-23T11:34:17.893Z"
-    },
-    {
-      "id": "31e81578-0a9e-44e0-904f-4ad34753d312",
-      "type": "prediction",
-      "title": "Upcoming congestion detected",
-      "description": "Model expects Electronic City Toll to cross heavy threshold in 20 mins",
-      "severity": "warning",
-      "junctionId": "j8",
-      "timestamp": "2025-12-23T11:34:07.893Z"
-    },
-    {
-      "id": "da8be2f0-c8a8-438a-b935-1a5c2c34fdd0",
-      "type": "prediction",
-      "title": "Upcoming congestion detected",
-      "description": "Model expects Electronic City Toll to cross heavy threshold in 20 mins",
-      "severity": "warning",
-      "junctionId": "j8",
-      "timestamp": "2025-12-23T11:34:02.893Z"
     }
   ],
   "recommendations": [
+    {
+      "id": "43a15cdf-6d4c-43e7-937d-8d90ab1068a0",
+      "junctionId": "j2",
+      "junctionName": "Silk Board Junction",
+      "action": "Extend dominant approach by 15s and balance offsets",
+      "reasoning": "Forecast shows heavy congestion in 30 minutes at Silk Board Junction with projected queue 287m. Applying pre-emptive timing changes to prevent spillback.",
+      "expectedImpact": {
+        "travelTimeReduction": 15,
+        "fuelSavings": 10,
+        "emissionReduction": 12
+      },
+      "status": "pending"
+    },
+    {
+      "id": "96201871-21b1-45b5-9900-fdca2a2f710c",
+      "junctionId": "j8",
+      "junctionName": "Electronic City Toll",
+      "action": "Coordinate corridor and extend critical approach by 25s",
+      "reasoning": "Forecast shows severe congestion in 30 minutes at Electronic City Toll with projected queue 457m. Applying pre-emptive timing changes to prevent spillback.",
+      "expectedImpact": {
+        "travelTimeReduction": 22,
+        "fuelSavings": 16,
+        "emissionReduction": 18
+      },
+      "status": "pending"
+    },
     {
       "id": "deabc4f1-8e12-47f2-952d-3926defe6ecd",
       "junctionId": "j6",
@@ -329,40 +355,14 @@
         "emissionReduction": 12
       },
       "status": "pending"
-    },
-    {
-      "id": "2797cd67-8f3d-4177-ad09-6ae7ab8a2c5d",
-      "junctionId": "j9",
-      "junctionName": "Whitefield Main Road",
-      "action": "Extend dominant approach by 15s and balance offsets",
-      "reasoning": "Forecast shows heavy congestion in 30 minutes at Whitefield Main Road with projected queue 265m. Applying pre-emptive timing changes to prevent spillback.",
-      "expectedImpact": {
-        "travelTimeReduction": 15,
-        "fuelSavings": 10,
-        "emissionReduction": 12
-      },
-      "status": "pending"
-    },
-    {
-      "id": "153ab735-fc49-4cd4-8302-f20bcb64bc4a",
-      "junctionId": "j7",
-      "junctionName": "Koramangala Sony Signal",
-      "action": "Coordinate corridor and extend critical approach by 25s",
-      "reasoning": "Forecast shows severe congestion in 30 minutes at Koramangala Sony Signal with projected queue 563m. Applying pre-emptive timing changes to prevent spillback.",
-      "expectedImpact": {
-        "travelTimeReduction": 22,
-        "fuelSavings": 16,
-        "emissionReduction": 18
-      },
-      "status": "accepted"
     }
   ],
   "metrics": {
     "avgTravelTime": 15,
-    "fuelConsumption": 19.6,
-    "co2Emissions": 40.5,
-    "emergencyResponseTime": 5.3,
-    "activeVehicles": 14050,
+    "fuelConsumption": 18.9,
+    "co2Emissions": 46.1,
+    "emergencyResponseTime": 5,
+    "activeVehicles": 13348,
     "optimizedJunctions": 12
   },
   "hourlyData": [
@@ -468,9 +468,9 @@
       "junctionId": "j1",
       "junctionName": "MG Road - Brigade Road",
       "horizonMinutes": 30,
-      "predictedCongestion": "severe",
-      "projectedVehicleCount": 128,
-      "projectedQueueLength": 384,
+      "predictedCongestion": "heavy",
+      "projectedVehicleCount": 110,
+      "projectedQueueLength": 380,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -479,8 +479,8 @@
       "junctionName": "Silk Board Junction",
       "horizonMinutes": 30,
       "predictedCongestion": "heavy",
-      "projectedVehicleCount": 334,
-      "projectedQueueLength": 227,
+      "projectedVehicleCount": 339,
+      "projectedQueueLength": 287,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -488,9 +488,9 @@
       "junctionId": "j3",
       "junctionName": "Hebbal Flyover",
       "horizonMinutes": 30,
-      "predictedCongestion": "heavy",
-      "projectedVehicleCount": 265,
-      "projectedQueueLength": 249,
+      "predictedCongestion": "moderate",
+      "projectedVehicleCount": 298,
+      "projectedQueueLength": 184,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -499,8 +499,8 @@
       "junctionName": "KR Puram Junction",
       "horizonMinutes": 30,
       "predictedCongestion": "low",
-      "projectedVehicleCount": 699,
-      "projectedQueueLength": 28,
+      "projectedVehicleCount": 703,
+      "projectedQueueLength": 21,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -509,8 +509,8 @@
       "junctionName": "Marathahalli Bridge",
       "horizonMinutes": 30,
       "predictedCongestion": "moderate",
-      "projectedVehicleCount": 820,
-      "projectedQueueLength": 119,
+      "projectedVehicleCount": 722,
+      "projectedQueueLength": 172,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -519,8 +519,8 @@
       "junctionName": "Indiranagar 100ft Road",
       "horizonMinutes": 30,
       "predictedCongestion": "severe",
-      "projectedVehicleCount": 358,
-      "projectedQueueLength": 537,
+      "projectedVehicleCount": 303,
+      "projectedQueueLength": 454,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -529,8 +529,8 @@
       "junctionName": "Koramangala Sony Signal",
       "horizonMinutes": 30,
       "predictedCongestion": "severe",
-      "projectedVehicleCount": 535,
-      "projectedQueueLength": 485,
+      "projectedVehicleCount": 469,
+      "projectedQueueLength": 455,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -539,8 +539,8 @@
       "junctionName": "Electronic City Toll",
       "horizonMinutes": 30,
       "predictedCongestion": "severe",
-      "projectedVehicleCount": 453,
-      "projectedQueueLength": 460,
+      "projectedVehicleCount": 390,
+      "projectedQueueLength": 512,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -548,9 +548,9 @@
       "junctionId": "j9",
       "junctionName": "Whitefield Main Road",
       "horizonMinutes": 30,
-      "predictedCongestion": "moderate",
-      "projectedVehicleCount": 691,
-      "projectedQueueLength": 174,
+      "predictedCongestion": "heavy",
+      "projectedVehicleCount": 670,
+      "projectedQueueLength": 222,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -559,7 +559,7 @@
       "junctionName": "Yeshwanthpur Circle",
       "horizonMinutes": 30,
       "predictedCongestion": "moderate",
-      "projectedVehicleCount": 387,
+      "projectedVehicleCount": 498,
       "projectedQueueLength": 115,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
@@ -569,8 +569,8 @@
       "junctionName": "Jayanagar 4th Block",
       "horizonMinutes": 30,
       "predictedCongestion": "heavy",
-      "projectedVehicleCount": 258,
-      "projectedQueueLength": 301,
+      "projectedVehicleCount": 112,
+      "projectedQueueLength": 282,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     },
@@ -578,9 +578,9 @@
       "junctionId": "j12",
       "junctionName": "Majestic Bus Stand",
       "horizonMinutes": 30,
-      "predictedCongestion": "low",
-      "projectedVehicleCount": 529,
-      "projectedQueueLength": 90,
+      "predictedCongestion": "moderate",
+      "projectedVehicleCount": 570,
+      "projectedQueueLength": 157,
       "confidence": 0.78,
       "reason": "Projected queue growth based on current load and 30m horizon."
     }
