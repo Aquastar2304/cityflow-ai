@@ -5,6 +5,9 @@ import { AIRecommendation } from "./types";
 import { verifyToken, issueDemoToken } from "./auth";
 import { config } from "./config";
 import swaggerUi from "swagger-ui-express";
+import { explainRecommendation } from "./explainability";
+import { recordRecommendationAudit } from "./audit";
+
 
 const app = express();
 
@@ -35,9 +38,21 @@ app.get("/api/alerts", (_req, res) => {
   res.json(getState().alerts);
 });
 
-app.get("/api/recommendations", (_req, res) => {
-  res.json(getState().recommendations);
+app.get("/api/recommendations", (req, res) => {
+  const role = req.user?.role;
+  const state = getState();
+
+  const enriched = state.recommendations.map((rec) => {
+    const prediction = state.predictions?.find((p) => p.junctionId === rec.junctionId);
+    return {
+      ...rec,
+      explanation: explainRecommendation(rec, prediction, role),
+    };
+  });
+
+  res.json(enriched);
 });
+
 
 app.get("/api/metrics", (_req, res) => {
   res.json(getState().metrics);
@@ -71,18 +86,29 @@ app.post("/api/emergencies", verifyToken(["ops", "admin"]), (req, res) => {
 // Mutations
 app.patch("/api/recommendations/:id", verifyToken(["ops", "admin"]), (req, res) => {
   const { id } = req.params;
-  const { status } = req.body as Partial<Pick<AIRecommendation, "status">>;
+  const { status } = (req.body || {}) as { status?: "accepted" | "rejected" };
+  const role = req.user!.role;
 
-  if (!status || !["pending", "accepted", "rejected"].includes(status)) {
-    return res.status(400).json({ error: "status must be pending | accepted | rejected" });
+  if (!status || !["accepted", "rejected"].includes(status)) {
+    return res.status(400).json({
+      error: "status must be 'accepted' or 'rejected'",
+    });
   }
 
-  const updated = updateRecommendationStatus(id, status as AIRecommendation["status"]);
+  const updated = updateRecommendationStatus(id, status);
   if (!updated) {
     return res.status(404).json({ error: "Recommendation not found" });
   }
 
-  res.json(updated);
+  const explanation =
+    explainRecommendation(updated, undefined, role)[0]?.text ?? "";
+
+  recordRecommendationAudit(id, status, role, explanation);
+
+  res.json({
+    ...updated,
+    explanation: explainRecommendation(updated, undefined, role),
+  });
 });
 
 startSimulation();
@@ -105,7 +131,38 @@ const swaggerDoc = {
     "/recommendations/{id}": {
       patch: {
         security: [{ bearerAuth: [] }],
-        responses: { 200: { description: "updated recommendation" } },
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: {
+              type: "string",
+            },
+            description: "Recommendation ID",
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    enum: ["accepted", "rejected"],
+                  },
+                },
+                required: ["status"],
+              },
+            },
+          },
+        },
+        responses: { 200: { description: "updated recommendation" },
+        400: { description: "invalid status" },
+        404: { description: "recommendation not found" },
+      },
       },
     },
     "/metrics": { get: { responses: { 200: { description: "metrics" } } } },

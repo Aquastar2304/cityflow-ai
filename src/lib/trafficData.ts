@@ -13,6 +13,17 @@ export interface Junction {
   avgWaitTime: number;
   corridorId: string;
 }
+export interface ExpectedImpact {
+  travelTimeReduction: number;
+  fuelSavings: number;
+  emissionReduction: number;
+}
+
+export interface Explanation {
+  level: "short" | "detailed" | "technical";
+  text: string;
+}
+
 
 export interface Alert {
   id: string;
@@ -30,13 +41,11 @@ export interface AIRecommendation {
   junctionName: string;
   action: string;
   reasoning: string;
-  expectedImpact: {
-    travelTimeReduction: number;
-    fuelSavings: number;
-    emissionReduction: number;
-  };
+  expectedImpact: ExpectedImpact;
   status: "pending" | "accepted" | "rejected";
+  explanation?: Explanation[];
 }
+
 
 export interface Metrics {
   avgTravelTime: number;

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "0b598e64-d27b-47eb-a632-52278c313aa4",
+    "entity": "recommendation",
+    "entityId": "8b414216-e817-4bae-95b7-91631b8bee6a",
+    "action": "accepted",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at Electronic City Toll, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T17:11:37.614Z"
+  },
+  {
+    "id": "d3a99b15-12e0-4163-a436-d32dbbcef50b",
+    "entity": "recommendation",
+    "entityId": "ed8d3c61-6e11-4b30-b16b-5d5f0acf4ef9",
+    "action": "accepted",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at Electronic City Toll, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T17:11:31.183Z"
+  },
+  {
+    "id": "db49d536-5126-43c6-8340-b1cc85186699",
+    "entity": "recommendation",
+    "entityId": "0bcf88dd-0fb2-4269-9201-bc8d98e20cca",
+    "action": "rejected",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at Yeshwanthpur Circle, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T17:09:33.508Z"
+  },
+  {
+    "id": "100fb619-ca1c-4ab5-8ddf-7066c059b82a",
+    "entity": "recommendation",
+    "entityId": "a12ea9b3-b167-4c40-8ab2-ca3c6b7b7cda",
+    "action": "accepted",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at Hebbal Flyover, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T17:09:23.360Z"
+  },
+  {
+    "id": "5871ef5f-0952-4257-bafa-ae2a21397ad1",
+    "entity": "recommendation",
+    "entityId": "3c034f38-4fe2-455f-98dc-7ff0bfae43a1",
+    "action": "accepted",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at Hebbal Flyover, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T17:08:03.954Z"
+  },
+  {
+    "id": "3f7f0885-8dff-4cd1-aca6-d3b477463c09",
+    "entity": "recommendation",
+    "entityId": "60838ac3-33fe-4123-bdc0-87029383d487",
+    "action": "accepted",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at KR Puram Junction, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T17:08:02.782Z"
+  },
+  {
+    "id": "127ec06c-ee18-4867-987a-b5a04b3e32b6",
+    "entity": "recommendation",
+    "entityId": "aeb60a95-432f-40cc-94b3-dbd841cecb8d",
+    "action": "accepted",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at Yeshwanthpur Circle, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T17:08:02.198Z"
+  },
+  {
+    "id": "7c97a7c6-c4a4-4a34-9cb9-c48f1f6789e1",
+    "entity": "recommendation",
+    "entityId": "8771c440-1e48-47dd-986f-3e4ff5ffe5f1",
+    "action": "accepted",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at KR Puram Junction, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T17:08:01.466Z"
+  },
+  {
+    "id": "754f59d5-3d76-4e9d-a00d-65a4389be97b",
+    "entity": "recommendation",
+    "entityId": "83083df1-b5dd-4bc2-bcf2-6a7830783655",
+    "action": "accepted",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at Hebbal Flyover, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T17:07:57.205Z"
+  },
+  {
+    "id": "02a2f85b-dd7d-46da-bf95-5ef578be9bf9",
+    "entity": "recommendation",
+    "entityId": "5321a9ed-dec4-4b83-ad3f-b978a72b0349",
+    "action": "accepted",
+    "role": "ops",
+    "explanation": "Traffic congestion is expected to rise at Koramangala Sony Signal, so a proactive signal adjustment is recommended.",
+    "timestamp": "2025-12-24T15:50:29.596Z"
+  }
+]

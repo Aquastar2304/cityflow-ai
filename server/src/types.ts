@@ -1,4 +1,20 @@
 export type CongestionLevel = "low" | "moderate" | "heavy" | "severe";
+export type ExplanationLevel = "short" | "detailed" | "technical";
+
+export interface Explanation {
+  level: ExplanationLevel;
+  text: string;
+}
+
+export interface AuditLog {
+  id: string;
+  entity: "recommendation";
+  entityId: string;
+  action: "accepted" | "rejected";
+  role: "ops" | "planner" | "admin";
+  explanation: string;
+  timestamp: string;
+}
 
 export interface Junction {
   id: string;
@@ -36,6 +52,7 @@ export interface AIRecommendation {
   reasoning: string;
   expectedImpact: ExpectedImpact;
   status: "pending" | "accepted" | "rejected";
+  explanation?: Explanation[];
 }
 
 export interface Metrics {

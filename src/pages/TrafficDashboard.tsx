@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { 
-  Clock, 
-  Fuel, 
-  Leaf, 
-  Siren, 
-  Car, 
+import {
+  Clock,
+  Fuel,
+  Leaf,
+  Siren,
+  Car,
   CheckCircle,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 import { Navbar } from "@/components/layout/Navbar";
 import { MetricCard } from "@/components/dashboard/MetricCard";
@@ -15,10 +15,7 @@ import { AlertPanel } from "@/components/dashboard/AlertPanel";
 import { RecommendationCard } from "@/components/dashboard/RecommendationCard";
 import { JunctionMap } from "@/components/dashboard/JunctionMap";
 import { CongestionChart } from "@/components/dashboard/CongestionChart";
-import { 
-  Junction,
-  AIRecommendation
-} from "@/lib/trafficData";
+import { Junction, AIRecommendation } from "@/lib/trafficData";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -26,7 +23,15 @@ import { api } from "@/lib/api";
 
 const TrafficDashboard = () => {
   const queryClient = useQueryClient();
-  const [selectedJunctionId, setSelectedJunctionId] = useState<string | null>(null);
+
+  /* 🔐 ROLE (later derive from token) */
+  const role: "ops" | "planner" | "admin" = "ops";
+
+  const [selectedJunctionId, setSelectedJunctionId] = useState<string | null>(
+    null
+  );
+
+  /* =================== QUERIES =================== */
 
   const { data: junctions = [], isLoading: loadingJunctions } = useQuery({
     queryKey: ["junctions"],
@@ -40,7 +45,10 @@ const TrafficDashboard = () => {
     refetchInterval: 5000,
   });
 
-  const { data: recommendations = [], isLoading: loadingRecommendations } = useQuery({
+  const {
+    data: recommendations = [],
+    isLoading: loadingRecommendations,
+  } = useQuery({
     queryKey: ["recommendations"],
     queryFn: api.getRecommendations,
     refetchInterval: 5000,
@@ -58,18 +66,22 @@ const TrafficDashboard = () => {
     refetchInterval: 10000,
   });
 
-  const selectedJunction = useMemo(
-    () => junctions.find((j) => j.id === selectedJunctionId) ?? null,
-    [junctions, selectedJunctionId]
-  );
+  /* =================== MUTATION =================== */
 
   const recommendationMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: AIRecommendation["status"] }) =>
-      api.updateRecommendationStatus(id, status),
+    mutationFn: ({
+      id,
+      status,
+    }: {
+      id: string;
+      status: AIRecommendation["status"];
+    }) => api.updateRecommendationStatus(id, status),
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["recommendations"] });
       queryClient.invalidateQueries({ queryKey: ["metrics"] });
     },
+
     onError: () => {
       toast({
         title: "Action failed",
@@ -83,12 +95,11 @@ const TrafficDashboard = () => {
     recommendationMutation.mutate(
       { id, status: "accepted" },
       {
-        onSuccess: () => {
+        onSuccess: () =>
           toast({
             title: "Recommendation Accepted",
             description: "Signal timing optimization has been applied.",
-          });
-        },
+          }),
       }
     );
   };
@@ -97,17 +108,25 @@ const TrafficDashboard = () => {
     recommendationMutation.mutate(
       { id, status: "rejected" },
       {
-        onSuccess: () => {
+        onSuccess: () =>
           toast({
             title: "Recommendation Rejected",
             description: "The AI will learn from this decision.",
-          });
-        },
+          }),
       }
     );
   };
 
-  const pendingRecommendations = recommendations.filter(r => r.status === "pending");
+  /* =================== DERIVED =================== */
+
+  const selectedJunction = useMemo(
+    () => junctions.find((j) => j.id === selectedJunctionId) ?? null,
+    [junctions, selectedJunctionId]
+  );
+
+  const pendingRecommendations = recommendations.filter(
+    (r) => r.status === "pending"
+  );
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({ queryKey: ["junctions"] });
@@ -118,80 +137,81 @@ const TrafficDashboard = () => {
   };
 
   const isLoading =
-    loadingJunctions || loadingAlerts || loadingRecommendations || !currentMetrics;
+    loadingJunctions ||
+    loadingAlerts ||
+    loadingRecommendations ||
+    !currentMetrics;
+
+  /* =================== RENDER =================== */
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <main className="pt-20 pb-8">
         <div className="container mx-auto px-4">
           {/* Header */}
-          <motion.div 
-            className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
+          <motion.div
+            className="flex flex-col md:flex-row justify-between gap-4 mb-8"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
           >
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-1">
+              <h1 className="text-2xl md:text-3xl font-bold">
                 Traffic Control Center
               </h1>
               <p className="text-muted-foreground">
                 Real-time monitoring and AI-powered optimization
               </p>
             </div>
+
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-success/30">
                 <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                <span className="text-xs text-success font-medium">System Active</span>
+                <span className="text-xs text-success font-medium">
+                  System Active
+                </span>
               </div>
-              <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefresh}
+                disabled={isLoading}
+              >
                 <RefreshCw className="w-4 h-4" />
                 Refresh
               </Button>
             </div>
           </motion.div>
 
-          {/* Metrics Row */}
-          <motion.div 
-            className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-          >
-            {currentMetrics ? (
+          {/* Metrics */}
+          <motion.div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
+            {currentMetrics && (
               <>
                 <MetricCard
                   title="Avg Travel Time"
                   value={currentMetrics.avgTravelTime}
                   unit="min"
                   icon={Clock}
-                  trend={{ value: 12, positive: true }}
-                  variant="primary"
                 />
                 <MetricCard
                   title="Fuel Consumption"
                   value={currentMetrics.fuelConsumption}
                   unit="L/100km"
                   icon={Fuel}
-                  trend={{ value: 8, positive: true }}
-                  variant="warning"
                 />
                 <MetricCard
                   title="CO₂ Emissions"
                   value={currentMetrics.co2Emissions}
                   unit="t/hr"
                   icon={Leaf}
-                  trend={{ value: 15, positive: true }}
-                  variant="success"
                 />
                 <MetricCard
                   title="Emergency Response"
                   value={currentMetrics.emergencyResponseTime}
                   unit="min"
                   icon={Siren}
-                  variant="destructive"
                 />
                 <MetricCard
                   title="Active Vehicles"
@@ -203,103 +223,75 @@ const TrafficDashboard = () => {
                   value={currentMetrics.optimizedJunctions}
                   unit={`/${junctions.length || 52}`}
                   icon={CheckCircle}
-                  variant="success"
                 />
               </>
-            ) : (
-              <div className="col-span-6 text-sm text-muted-foreground">Loading metrics...</div>
             )}
           </motion.div>
 
-          {/* Main Content Grid */}
+          {/* Main Grid */}
           <div className="grid lg:grid-cols-3 gap-6">
-            {/* Left Column - Map & Chart */}
-            <motion.div 
-              className="lg:col-span-2 space-y-6"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-            >
-              <JunctionMap 
-                junctions={junctions} 
-                onSelectJunction={(junction: Junction) => setSelectedJunctionId(junction.id)}
+            <div className="lg:col-span-2 space-y-6">
+              <JunctionMap
+                junctions={junctions}
+                onSelectJunction={(j: Junction) =>
+                  setSelectedJunctionId(j.id)
+                }
               />
               <CongestionChart data={hourlyData} />
-            </motion.div>
+            </div>
 
-            {/* Right Column - Alerts & Recommendations */}
-            <motion.div 
-              className="space-y-6"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
-            >
+            <div className="space-y-6">
               <AlertPanel alerts={alerts} />
-              
-              <div className="glass rounded-xl border border-border overflow-hidden">
-                <div className="p-4 border-b border-border flex items-center justify-between">
-                  <h3 className="font-semibold text-foreground">AI Recommendations</h3>
-                  <span className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary font-medium">
+
+              <div className="glass rounded-xl border">
+                <div className="p-4 border-b flex justify-between">
+                  <h3 className="font-semibold">AI Recommendations</h3>
+                  <span className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary">
                     {pendingRecommendations.length} Pending
                   </span>
                 </div>
+
                 <div className="p-4 space-y-4">
-                  {pendingRecommendations.length > 0 ? (
-                    pendingRecommendations.map(rec => (
+                  {pendingRecommendations.length ? (
+                    pendingRecommendations.map((rec) => (
                       <RecommendationCard
                         key={rec.id}
                         recommendation={rec}
                         onAccept={handleAcceptRecommendation}
                         onReject={handleRejectRecommendation}
+                        role={role}
                       />
                     ))
                   ) : (
                     <div className="text-center py-8 text-muted-foreground">
                       <CheckCircle className="w-10 h-10 mx-auto mb-2 text-success" />
-                      <p className="text-sm">All recommendations processed</p>
+                      All recommendations processed
                     </div>
                   )}
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
-          {/* Selected Junction Detail */}
+          {/* Junction Detail */}
           {selectedJunction && (
-            <motion.div 
-              className="mt-6 glass rounded-xl border border-primary/20 p-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-foreground">
-                  Junction Detail: {selectedJunction.name}
-                </h3>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={() => setSelectedJunction(null)}
-                >
-                  Close
-                </Button>
-              </div>
+            <motion.div className="mt-6 glass rounded-xl border p-6">
+              <h3 className="font-semibold mb-4">
+                Junction Detail: {selectedJunction.name}
+              </h3>
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-secondary/50 rounded-lg p-4">
-                  <p className="text-xs text-muted-foreground mb-1">Vehicle Count</p>
-                  <p className="text-xl font-bold text-foreground">{selectedJunction.vehicleCount}</p>
+                <div className="bg-secondary/50 p-4 rounded">
+                  Vehicle Count: {selectedJunction.vehicleCount}
                 </div>
-                <div className="bg-secondary/50 rounded-lg p-4">
-                  <p className="text-xs text-muted-foreground mb-1">Queue Length</p>
-                  <p className="text-xl font-bold text-foreground">{selectedJunction.queueLength}m</p>
+                <div className="bg-secondary/50 p-4 rounded">
+                  Queue Length: {selectedJunction.queueLength}m
                 </div>
-                <div className="bg-secondary/50 rounded-lg p-4">
-                  <p className="text-xs text-muted-foreground mb-1">Avg Wait Time</p>
-                  <p className="text-xl font-bold text-foreground">{selectedJunction.avgWaitTime}s</p>
+                <div className="bg-secondary/50 p-4 rounded">
+                  Avg Wait: {selectedJunction.avgWaitTime}s
                 </div>
-                <div className="bg-secondary/50 rounded-lg p-4">
-                  <p className="text-xs text-muted-foreground mb-1">Status</p>
-                  <p className="text-xl font-bold capitalize text-foreground">{selectedJunction.congestionLevel}</p>
+                <div className="bg-secondary/50 p-4 rounded capitalize">
+                  Status: {selectedJunction.congestionLevel}
                 </div>
               </div>
             </motion.div>

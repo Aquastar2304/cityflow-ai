@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { TrafficState } from "./types";
+import { TrafficState, AuditLog } from "./types";
 import { config } from "./config";
 
 const ensureDir = (filePath: string) => {
@@ -17,10 +17,8 @@ export const loadState = (fallback: TrafficState): TrafficState => {
       const raw = fs.readFileSync(filePath, "utf-8");
       return JSON.parse(raw) as TrafficState;
     }
-  } catch (err) {
-    // swallow and fall back
-    // eslint-disable-next-line no-console
-    console.warn("Failed to load state, using fallback.", err);
+  } catch {
+    // fallback
   }
   return fallback;
 };
@@ -31,3 +29,14 @@ export const saveState = (state: TrafficState) => {
   fs.writeFileSync(filePath, JSON.stringify(state, null, 2), "utf-8");
 };
 
+// 🔹 AUDIT LOGS (PHASE 5)
+
+const auditFile = path.resolve("server/data/audit.json");
+
+export const saveAuditLog = (log: AuditLog) => {
+  ensureDir(auditFile);
+  const existing = fs.existsSync(auditFile)
+    ? (JSON.parse(fs.readFileSync(auditFile, "utf-8")) as AuditLog[])
+    : [];
+  fs.writeFileSync(auditFile, JSON.stringify([log, ...existing], null, 2), "utf-8");
+};
